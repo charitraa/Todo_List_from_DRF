@@ -3,12 +3,27 @@ from rest_framework.views import APIView
 from . serializers import TodoViewSerializer
 from rest_framework import status
 from rest_framework.response import Response
+from .models import Todo
 # Create your views here.
 
 class TodoListView(APIView):
-    def get(self,request):
-        serializer = TodoViewSerializer(data=request)
+    def post(self, request):
+        serializer = TodoViewSerializer(data=request.data)
         if serializer.is_valid():
-            return Response(serializer.data,status = status.HTTP_200_OK)
-        print(serializer.data)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    def get(self):
+        todos = Todo.objects.all()
+        serializer = TodoViewSerializer(todos, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    def delete(self,pk=None):
+        try:
+            todo = Todo.objects.get(id=pk)
+        except Todo.DoesNotExist:
+            return Response({"error": "Todo List not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        todo.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT) 
