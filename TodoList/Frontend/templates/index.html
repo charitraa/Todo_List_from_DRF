@@ -87,7 +87,18 @@
 
 
     <script>
+        function Todo() {
+            let list = document.getElementsByClassName("container")
+            let url = 'http://127.0.0.1:8000/todo-list/'
 
+            fetch(url)
+                .then((res) => {
+                    return res.json(); // Return the parsed JSON data
+                })
+                .then(function (data) {
+                    console.log('data:', data); // Log the received data
+                })
+        }
     </script>
 </body>
 

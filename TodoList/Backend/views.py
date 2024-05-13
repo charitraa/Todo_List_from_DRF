@@ -14,16 +14,15 @@ class TodoListView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def get(self):
+    def get(self,request):
         todos = Todo.objects.all()
         serializer = TodoViewSerializer(todos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
-    def delete(self,pk=None):
+    def delete(self,request,*args, **kwargs):
         try:
-            todo = Todo.objects.get(id=pk)
+            todo = Todo.objects.filter(id=kwargs['pk'])
+            serializer = TodoViewSerializer(todo, many=True)
         except Todo.DoesNotExist:
             return Response({"error": "Todo List not found"}, status=status.HTTP_404_NOT_FOUND)
-        
-        todo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT) 
+        return Response(serializer.data, status=status.HTTP_200_OK) 
