@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from . serializers import TodoSerializer
+from . serializers import TodoViewSerializer
+from rest_framework import status
+from rest_framework.response import Response
 # Create your views here.
 
-class TodoList(APIView):
+class TodoListView(APIView):
     def get(self,request):
-        serializer = TodoSerializer(request.data)
-        return serializer.data
-    def post(self,request):
-        pass
+        serializer = TodoViewSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.data,status = status.HTTP_200_OK)
+    
