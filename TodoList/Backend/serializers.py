@@ -1,7 +1,7 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from .models import Todo
 
-class TodoViewSerializer(ModelSerializer):
+class TodoViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = '__all__'

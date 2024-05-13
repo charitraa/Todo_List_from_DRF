@@ -7,7 +7,8 @@ from rest_framework.response import Response
 
 class TodoListView(APIView):
     def get(self,request):
-        serializer = TodoViewSerializer(data=request.data)
+        serializer = TodoViewSerializer(data=request)
         if serializer.is_valid():
             return Response(serializer.data,status = status.HTTP_200_OK)
+        print(serializer.data)
     
