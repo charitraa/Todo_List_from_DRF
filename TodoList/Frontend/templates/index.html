@@ -42,7 +42,7 @@
 		}
 
 		.delete-btn {
-			background-color: darkred;
+			background-color: rgb(184, 10, 10);
 			color: white;
 			padding: 10px;
 			border: none;
@@ -100,7 +100,6 @@
 		Todo()
 		function Todo() {
 			let todoListHTML = ''
-			let list = document.getElementsByClassName("container")
 			let url = 'http://127.0.0.1:8000/todo-list/'
 
 			fetch(url)
@@ -114,10 +113,7 @@
 					console.log('data:', data);
 					for (let i = 0; i < data.length; i++) {
 						const todoObject = data[i]
-						console.log(todoObject)
 						const { description, created_at } = todoObject
-						console.log(description, created_at)
-
 						const html = `
             <div>${i + 1}. ${description}</div>
     				<div>${created_at}</div> 
@@ -135,19 +131,30 @@
 		function addTodo() {
 			const inputElement = document.querySelector('.js-input')
 			const dateElement = document.querySelector('.js-date')
-			let url = 'http://127.0.0.1:8000/todo-list-add/'
-			const name = inputElement.value
-			const dueDate = dateElement.value
-			if (name === '' && dueDate == '') {
+			let url = 'http://127.0.0.1:8000/todo-add/'
+			const description = inputElement.value
+			const created_at = dateElement.value
+			if (description === '' && created_at == '') {
 				document.querySelector('.error').innerHTML = `<div class="errors">Please enter a valid Name and Date !</div>`
-			} else if (name === '') {
+			} else if (description === '') {
 				document.querySelector('.error').innerHTML = `<div class="errors">Please enter a valid Name !</div>`
-			} else if (dueDate == '') {
+			} else if (created_at == '') {
 				document.querySelector('.error').innerHTML = `<div class="errors">Please enter a valid Date !</div>`
 			} else {
-				fetch()
+				fetch(url, {
+					method: "POST",
+					headers: {
+						contentType: "application/json"
+					},
+					body: JSON.stringify({
+						'description': description,
+						'created_at': created_at
+					})
+				})
+					.then(function (response) {
+						Todo()
+					})
 			}
-			Todo()
 		}
 
 	</script>

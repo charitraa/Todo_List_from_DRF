@@ -4,6 +4,6 @@ from Backend import views
 
 urlpatterns = [
     path('todo-list/',views.todo_view,name='view'),
-    path('todo-list-add/',views.todo_add,name='add'),
-    path('todo-list-delete/<str:id>/', views.todo_delete, name='delete')
+    path('todo-add/',views.todo_add,name='add'),
+    path('todo-delete/<str:id>/', views.todo_delete, name='delete')
 ]
