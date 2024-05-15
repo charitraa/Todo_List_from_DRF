@@ -4,6 +4,10 @@ from . serializers import TodoViewSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from .models import Todo
+from django.views.decorators.csrf import csrf_protect
+
+
+
 # Create your views here.
 
 @api_view(['GET'])
@@ -12,6 +16,7 @@ def todo_view(request):
     serializer = TodoViewSerializer(todos, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@csrf_protect
 @api_view(['POST'])
 def todo_add(request):
     serializer = TodoViewSerializer(data=request.data)

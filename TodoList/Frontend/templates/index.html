@@ -97,6 +97,23 @@
 
 
 	<script>
+
+		function getCookie(name) {
+			var cookievalue = null;
+			if (document.cookie && document.cookie !== '') {
+				var cookies = document.cookie.split(';')
+				for (var i = 0; i < cookies.length; i++) {
+					var cookie = cookies[i].trim()
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookievalue = decodeURIComponent(cookie.substring(name.length + 1))
+						break;
+					}
+				}
+			}
+			return cookievalue;
+		}
+		var crsftoken = getCookie('crsftoken');
+
 		Todo()
 		function Todo() {
 			let todoListHTML = ''
@@ -128,6 +145,9 @@
 					document.querySelector('.container').innerHTML = todoListHTML
 				})
 		}
+
+
+
 		function addTodo() {
 			const inputElement = document.querySelector('.js-input')
 			const dateElement = document.querySelector('.js-date')
@@ -144,7 +164,9 @@
 				fetch(url, {
 					method: "POST",
 					headers: {
-						contentType: "application/json"
+						'Content-Type': 'application/json',
+						// 'contentType': "application/json, charset=utf - 8",
+						'X-CSRFToken': crsftoken
 					},
 					body: JSON.stringify({
 						'description': description,
@@ -152,7 +174,10 @@
 					})
 				})
 					.then(function (response) {
+						document.querySelector('.js-input').innerHTML = ''
+						document.querySelector('.js-date').innerHTML = ''
 						Todo()
+
 					})
 			}
 		}
