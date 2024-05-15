@@ -2,107 +2,155 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="HTML, CSS, JavaScript">
-    <meta name="description" content="Todo-List webpage">
-    <meta name="author" content=" Ravi Shrestha">
-    <title>Todo List</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 20px;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="HTML, CSS, JavaScript">
+	<meta name="description" content="Todo-List webpage">
+	<meta name="author" content=" Ravi Shrestha">
+	<title>Todo List</title>
+	<style>
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+			margin: 20px;
+		}
 
-        .todo,
-        .container {
-            display: grid;
-            grid-template-columns: 200px 150px 100px;
-            gap: 10px;
-            align-items: center;
+		.todo,
+		.container {
+			display: grid;
+			grid-template-columns: 200px 150px 100px;
+			gap: 10px;
+			align-items: center;
 
-        }
+		}
 
-        .todo {
-            margin-bottom: 10px;
-            align-items: stretch;
-        }
+		.todo {
+			margin-bottom: 10px;
+			align-items: stretch;
+		}
 
-        .js-input,
-        .js-date {
-            font-size: 15px;
-            padding: 6px;
-        }
+		.js-input,
+		.js-date {
+			font-size: 15px;
+			padding: 6px;
+		}
 
-        .add-btn {
-            background-color: green;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
+		.add-btn {
+			background-color: green;
+			color: white;
+			border: none;
+			cursor: pointer;
+		}
 
-        .delete-btn {
-            background-color: darkred;
-            color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-        }
+		.delete-btn {
+			background-color: darkred;
+			color: white;
+			padding: 10px;
+			border: none;
+			cursor: pointer;
+		}
 
-        input {
-            border: solid rgb(121, 119, 114) 2px;
-        }
+		input {
+			border: solid rgb(121, 119, 114) 2px;
+		}
 
-        .main {
-            display: flex;
-            justify-content: center;
-            align-items: center
-        }
+		.main {
+			display: flex;
+			justify-content: center;
+			align-items: center
+		}
 
-        .containerr {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-    </style>
+		.containerr {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		.errors {
+			color: red;
+			font-size: 15px;
+			padding: 10px;
+			border: 1px solid red;
+			border-radius: 5px;
+			margin-bottom: 10px;
+		}
+	</style>
 </head>
 
 <body>
-    <div class="main">
-        <div class="containerr">
-            <h1>Todo List</h1>
-            <div class="todo">
-                <input type="text" placeholder="Todo name" class="js-input" name="title" required>
-                <input type="date" class="js-date" name="date" required>
-                <button class="add-btn">Add</button>
-            </div>
+	<div class="main">
+		<div class="containerr">
+			<h1>Todo List</h1>
+			<div class="todo">
+				<input type="text" placeholder="Todo name" class="js-input" name="title" required>
+				<input type="date" class="js-date" name="date" required>
+				<button onclick="addTodo();" class="add-btn">Add</button>
+			</div>
+			<div class="error">
 
-            <div class="container">
+			</div>
+			<div class="container">
 
-            </div>
-        </div>
+			</div>
+		</div>
 
-    </div>
+	</div>
 
 
-    <script>
-        Todo()
-        function Todo() {
-            let list = document.getElementsByClassName("container")
-            let url = 'http://127.0.0.1:8000/todo-list/'
+	<script>
+		Todo()
+		function Todo() {
+			let todoListHTML = ''
+			let list = document.getElementsByClassName("container")
+			let url = 'http://127.0.0.1:8000/todo-list/'
 
-            fetch(url)
-                .then((res) => {
-                    if (!resp.ok) {
-                        console.log('slight server error')
-                    }
-                    return res.json();
-                })
-                .then(function (data) {
-                    console.log('data:', data); // Log the received data
-                })
-        }
-    </script>
+			fetch(url)
+				.then((res) => {
+					if (!res.ok) {
+						console.log('slight server error')
+					}
+					return res.json();
+				})
+				.then(function (data) {
+					console.log('data:', data);
+					for (let i = 0; i < data.length; i++) {
+						const todoObject = data[i]
+						console.log(todoObject)
+						const { description, created_at } = todoObject
+						console.log(description, created_at)
+
+						const html = `
+            <div>${i + 1}. ${description}</div>
+    				<div>${created_at}</div> 
+						<button onclick="
+						addList();" 
+						class="delete-btn">
+							Delete
+						</button>`
+
+						todoListHTML += html
+					}
+					document.querySelector('.container').innerHTML = todoListHTML
+				})
+		}
+		function addTodo() {
+			const inputElement = document.querySelector('.js-input')
+			const dateElement = document.querySelector('.js-date')
+			let url = 'http://127.0.0.1:8000/todo-list-add/'
+			const name = inputElement.value
+			const dueDate = dateElement.value
+			if (name === '' && dueDate == '') {
+				document.querySelector('.error').innerHTML = `<div class="errors">Please enter a valid Name and Date !</div>`
+			} else if (name === '') {
+				document.querySelector('.error').innerHTML = `<div class="errors">Please enter a valid Name !</div>`
+			} else if (dueDate == '') {
+				document.querySelector('.error').innerHTML = `<div class="errors">Please enter a valid Date !</div>`
+			} else {
+				fetch()
+			}
+			Todo()
+		}
+
+	</script>
 </body>
 
 </html>

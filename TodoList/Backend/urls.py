@@ -3,7 +3,7 @@ from django.urls import path, include
 from Backend import views
 
 urlpatterns = [
-    path('todo-list/',views.TodoListView.as_view(),name='view'),
-    path('todo-list-add/',views.TodoListView.as_view(),name='add'),
-    path('todo-list-delete/<int:id>/', views.TodoListView.as_view(), name='todo-list-delete')
+    path('todo-list/',views.todo_view,name='view'),
+    path('todo-list-add/',views.todo_add,name='add'),
+    path('todo-list-delete/<str:id>/', views.todo_delete, name='delete')
 ]
