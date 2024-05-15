@@ -30,5 +30,7 @@ def todo_delete(request,pk):
     try:
         todo = Todo.objects.get(id=pk)
         todo.delete()
-    except todo.DoesNotExist:
-        return Response({"error": "Todo List not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"success": "Todo deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    except Todo.DoesNotExist:
+        return Response({"error": "Todo not found"}, status=status.HTTP_404_NOT_FOUND)
+    

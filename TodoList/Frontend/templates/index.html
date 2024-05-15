@@ -135,7 +135,8 @@
             <div>${i + 1}. ${description}</div>
     				<div>${created_at}</div> 
 						<button onclick="
-						addList();" 
+						deleteTodo(${data[i].id});
+						Todo();" 
 						class="delete-btn">
 							Delete
 						</button>`
@@ -182,6 +183,19 @@
 			}
 		}
 
+		function deleteTodo(item) {
+			url = `http://127.0.0.1:8000/todo-delete/${item}/`
+			fetch(url, {
+				method: "DELETE",
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': crsftoken
+				}
+			})
+				.then((response) => {
+					Todo()
+				})
+		}
 	</script>
 </body>
 
