@@ -6,8 +6,6 @@ from rest_framework.response import Response
 from .models import Todo
 from django.views.decorators.csrf import csrf_protect
 
-
-
 # Create your views here.
 
 @api_view(['GET'])
