@@ -72,10 +72,9 @@
         <div class="containerr">
             <h1>Todo List</h1>
             <div class="todo">
-                <input type="text" placeholder="Todo name" class="js-input" required>
-                <input type="date" class="js-date" required>
-                <button onclick="
-                            addTodo(); " class="add-btn">Add</button>
+                <input type="text" placeholder="Todo name" class="js-input" name="title" required>
+                <input type="date" class="js-date" name="date" required>
+                <button class="add-btn">Add</button>
             </div>
 
             <div class="container">
@@ -87,13 +86,17 @@
 
 
     <script>
+        Todo()
         function Todo() {
             let list = document.getElementsByClassName("container")
             let url = 'http://127.0.0.1:8000/todo-list/'
 
             fetch(url)
                 .then((res) => {
-                    return res.json(); // Return the parsed JSON data
+                    if (!resp.ok) {
+                        console.log('slight server error')
+                    }
+                    return res.json();
                 })
                 .then(function (data) {
                     console.log('data:', data); // Log the received data
