@@ -4,7 +4,7 @@
 
 First clone the repository from Github and switch to the new directory:
   ```shell
-    $ gh repo clone charitraa/TodoList
+    $ git clone https://github.com/charitraa/Todo_List_from_DRF.git
     $ cd TodoList
   ```
 
